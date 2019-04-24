@@ -5,6 +5,7 @@ import {
   createProtocol,
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib';
+import db from './db';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -63,6 +64,12 @@ app.on('ready', async () => {
     }
   }
   createWindow();
+  db.query('SELECT now()', [], (err: any, res: any) => {
+    if (err) {
+      console.error(err);
+    }
+    console.log(res.rows[0]);
+  });
 });
 
 // Exit cleanly on request from parent process in development mode.
