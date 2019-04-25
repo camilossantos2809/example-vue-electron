@@ -34,23 +34,23 @@
 </template>
 
 <script lang="ts">
-import Home from "@/views/Home.vue";
-import { ipcRenderer as ipc } from "electron";
-import { Component, Vue } from "vue-property-decorator";
+import Home from '@/views/Home.vue';
+import { ipcRenderer as ipc } from 'electron';
+import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
   components: {
-    Home
+    Home,
   },
   props: {
-    source: String
-  }
+    source: String,
+  },
 })
 export default class App extends Vue {
   public drawer = null;
   public testePg() {
-    ipc.send("testePg", { descricao: "%heineken%" });
-    console.log("Teste PG!!");
+    ipc.send('testePg', { descricao: '%heineken%' });
+    console.log('Teste PG!!');
   }
 }
 </script>

@@ -1,11 +1,12 @@
 import { Pool } from 'pg';
+import { config } from './config';
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'erp_testes',
-  password: '',
-  port: 5432,
+  user: config.user,
+  host: config.host,
+  database: config.database,
+  password: config.password,
+  port: config.port,
 });
 
 const query = async (text: string, params: any[], callback: any) => {
