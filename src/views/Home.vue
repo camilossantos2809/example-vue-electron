@@ -1,18 +1,27 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
-  </div>
+  <v-container fluid fill-height>
+    <v-layout justify-center align-center>
+<DataTable :rows="prods"/>
+    </v-layout>
+  </v-container>
 </template>
 
 <script lang="ts">
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import DataTable from '@/components/DataTable.vue';
+import { ipcRenderer as ipc } from 'electron';
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component({
   components: {
-    HelloWorld,
+    DataTable,
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  public prods = [];
+  public mounted() {
+    ipc.on('testePg', (event: any, arg: any) => {
+      this.prods = arg;
+    });
+  }
+}
 </script>

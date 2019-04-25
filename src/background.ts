@@ -1,6 +1,7 @@
 'use strict';
 
 import { app, BrowserWindow, protocol } from 'electron';
+import { ipcMain as ipc } from 'electron';
 import {
   createProtocol,
   installVueDevtools
@@ -16,7 +17,7 @@ let win: BrowserWindow | null;
 protocol.registerStandardSchemes(['app'], { secure: true });
 function createWindow() {
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600 });
+  win = new BrowserWindow({ width: 1200, height: 800 });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -59,17 +60,11 @@ app.on('ready', async () => {
     try {
       await installVueDevtools();
     } catch (e) {
-// tslint:disable-next-line: no-console
+      // tslint:disable-next-line: no-console
       console.error('Vue Devtools failed to install:', e.toString());
     }
   }
   createWindow();
-  db.query('SELECT now()', [], (err: any, res: any) => {
-    if (err) {
-      console.error(err);
-    }
-    console.log(res.rows[0]);
-  });
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -86,3 +81,12 @@ if (isDevelopment) {
     });
   }
 }
+
+ipc.on('testePg', (event: any, arg: any) => {
+  db.query('SELECT prod_codigo, prod_descricao, prod_codbarras from produtos where prod_descricao ilike $1', [arg.descricao], (err: any, res: any) => {
+    if (err) {
+      console.error(err);
+    }
+    event.sender.send('testePg', res.rows);
+  });
+});
